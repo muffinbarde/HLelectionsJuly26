@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>April 2026 General Election</title>
+    <link rel="icon" type="image/x-icon" href="https://harlonserver.net/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --logo-green: #5DA818;
+            --brand-green: #84DB52;
+            --gold: #FF9C18;
+            --err-red: #ef4444;
+            --neutral-bg: #f1f5f9;
+            --neutral-border: #cbd5e1;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-family: 'Inter', sans-serif;
+            overflow-y: scroll;
+        }
+
+        .header-brand {
+            background: linear-gradient(135deg, var(--logo-green) 0%, #4a8613 100%);
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .nav-btn {
+            font-weight: 800;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: 0.2s;
+            color: rgba(255,255,255,0.7);
+        }
+
+            .nav-btn:hover {
+                color: white;
+            }
+
+            .nav-btn.active {
+                color: white;
+                background: rgba(255,255,255,0.15);
+            }
+
+        .badge-win {
+            background-color: var(--gold);
+            color: white;
+            font-size: 10px;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .badge-pending {
+            background-color: #94a3b8;
+            color: white;
+            font-size: 10px;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .ref-pass {
+            border-left: 8px solid var(--logo-green);
+        }
+
+        .ref-fail {
+            border-left: 8px solid var(--err-red);
+        }
+
+        .status-pill-pass {
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .status-pill-fail {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .round-tab {
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #94a3b8;
+        }
+
+            .round-tab.active {
+                background: var(--logo-green);
+                color: white;
+                border-color: var(--logo-green);
+            }
+    </style>
+</head>
+<body>
+
+    <header class="header-brand text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                <div class="w-8 h-8 bg-white rounded flex items-center justify-center">
+                    <div class="w-5 h-5 rounded-full" style="background-color: var(--logo-green);"></div>
+                </div>
+                <h1 class="text-xl font-black italic tracking-tighter uppercase">April 2026 General Election</h1>
+            </div>
+            <nav class="flex space-x-1">
+                <button onclick="view('candidates')" id="btn-candidates" class="nav-btn text-sm">Candidates</button>
+                <button onclick="view('overview')" id="btn-overview" class="nav-btn active text-sm">House Composition</button>
+                <button onclick="view('districts')" id="btn-districts" class="nav-btn text-sm">Districts</button>
+                <button onclick="view('atlarge')" id="btn-atlarge" class="nav-btn text-sm">At-Large</button>
+                <button onclick="view('referendums')" id="btn-referendums" class="nav-btn text-sm">Referendums</button>
+                <button onclick="view('audit')" id="btn-audit" class="nav-btn text-sm">Spoilt Votes</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <div id="view-candidates" class="hidden space-y-8">
+
+            <div class="border-b-2 border-slate-200 pb-2">
+                <h2 class="text-3xl font-black uppercase italic text-slate-800">Candidates</h2>
+            </div>
+
+            <!-- 🔽 NEW FILTER BAR -->
+            <div class="card p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
+
+                <div class="flex gap-2">
+                    <button onclick="setCandidateMode('all')" id="cand-all" class="round-tab active">All</button>
+                    <button onclick="setCandidateMode('district')" id="cand-district" class="round-tab">District</button>
+                    <button onclick="setCandidateMode('atlarge')" id="cand-atlarge" class="round-tab">At-Large</button>
+                </div>
+
+                <select id="candidateDistrictSelect" class="hidden border rounded px-2 py-1 text-sm"></select>
+            </div>
+
+            <div id="candidate-container" class="space-y-10 max-w-5xl mx-auto"></div>
+        </div>
+
+        <div id="view-overview" class="space-y-8">
+            <div class="flex justify-between items-end border-b-2 border-slate-200 pb-2">
+                <h2 class="text-3xl font-black uppercase italic text-slate-800">Current Standings</h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">District Leaders</h3>
+                    <div id="overview-districts" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">At-Large Representatives</h3>
+                    <div id="overview-atlarge" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-districts" class="hidden space-y-6">
+            <div class="flex items-center justify-between bg-white p-4 rounded-xl border">
+                <div class="flex items-center space-x-3">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Viewing:</span>
+                    <select id="districtSelect" onchange="renderDistrictDetail()" class="font-black text-xl text-logo-green outline-none bg-transparent"></select>
+                </div>
+                <div id="round-selector" class="flex gap-2"></div>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">District Candidates</h3>
+                <div id="district-detail" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+                <div class="space-y-4">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">District At-Large Vote Breakdown</h3>
+                    <div id="district-atlarge-breakdown" class="card p-6 space-y-4"></div>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">District Referendum Support</h3>
+                    <div id="district-ref-breakdown" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-atlarge" class="hidden space-y-8">
+            <div class="border-b-2 border-slate-200 pb-2">
+                <h2 class="text-3xl font-black uppercase italic text-slate-800">At-Large Results</h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 space-y-4">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">Total Popular Vote</h3>
+                    <div id="atlarge-stats" class="space-y-6 p-6 card"></div>
+                </div>
+                <div class="lg:col-span-2 space-y-4">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">Final At-Large List</h3>
+                    <div id="atlarge-winners" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-referendums" class="hidden space-y-8">
+            <div class="border-b-2 border-slate-200 pb-2">
+                <h2 class="text-3xl font-black uppercase italic text-slate-800">Ballot Measures</h2>
+            </div>
+            <div id="referendum-container" class="space-y-6 max-w-5xl mx-auto"></div>
+        </div>
+
+        <div id="view-audit" class="hidden space-y-8">
+            <div class="border-b-2 border-slate-200 pb-2">
+                <h2 class="text-3xl font-black uppercase italic text-slate-800">Spoilt Votes</h2>
+            </div>
+            <div id="audit-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </div>
+
+    </main>
+
+    <script>
+        const partyColors = {
+            "Rights to All Booze": "#990012", "Aurora Party": "#5170ff", "Harlon Progress Party": "#74209a", "New Initiative": "#004b47", "Independent": "#64748b", "Default": "#94a3b8"};
+        const manualAtLargeWinners = [
+            { name: "Kr4ka", party: "Rights to All Booze"},
+            { name: "veryreal_alex", party: "Rights to All Booze"},
+            { name: "doomcat327", party: "Rights to All Booze" },
+            { name: "macoemacoe1", party: "Rights to All Booze" },
+            { name: "Its_novanut", party: "Rights to All Booze" } ];
+        const manualAtLargeVotes = { "Harlon Progress Party": 21, "New Initiative": 15, "Rights to All Booze": 35};
+        const referendums = [
+            {
+                title: "Constitutional Amendment Procedure Referendum", question: "Do you support amending the Constitution to allow constitutional amendments to be passed by a two-thirds majority in both the House of Assembly and the Senate, without requiring a national referendum?", yes: 58, no: 9, threshold: 0.5 },
+            { title: "Electoral Districts Implementation Referendum", question: "Should the Republic allow for proportional local districts within a proportionally representative system?", yes: 46, no: 21, threshold: 0.6666 }
+        ];
+
+        const districts = [
+            {
+                name: "City Centre",
+                id: "cc",
+                noWinner: false,
+                irvRounds: [
+                    {
+                        round: 2,
+                        results: [
+                            { name: "CodeWiz", party: "Aurora Party", votes: 4 },
+                            { name: "macoemacoe1", party: "Rights to All Booze", votes: 2 }
+                        ]
+                    },
+                    {
+                        round: 1,
+                        results: [
+                            { name: "CodeWiz", party: "Aurora Party", votes: 3 },
+                            { name: "macoemacoe1", party: "Rights to All Booze", votes: 2 },
+                            { name: "Nexalin", party: "Independent", votes: 1 }
+                        ]
+                    }
+                ],
+                atLargeVotes: { "Rights to All Booze": 14, "Harlon Progress Party": 7, "New Initiative": 1 },
+                referendumVotes: [{ title: "Constitutional Amendment Procedure Referendum", yes: 15, no: 5 }, { title: "Electoral Districts Implementation Referendum", yes: 10, no: 10 }],
+                spoiltBallots: [
+                    {
+                        content: "Referendums not filled out",
+                        scope: "Referendums",
+                        bookStatus: "Signed",
+                        justification: "Referendum votes not counted"
+                    },
+                    {
+                        content: "Referendums not filled out",
+                        scope: "Referendums",
+                        bookStatus: "Signed",
+                        justification: "Referendum votes not counted"
+                    },
+                    {
+                        content: "AT-LARGE<br>BAR<br><br>DISTRICT<br>macoemacoe1 (Rank 1)<br>Nexalin (Rank 2)<br>CodeWiz (Rank 3)<br><br>REFERENDUMS<br>Const. Amendment Procedure: yes<br>Electoral Districts Implementation: yes",
+                        scope: "All",
+                        bookStatus: "Unsigned",
+                        justification: "Ballot was not signed"
+                    },
+                    {
+                        content: "AT-LARGE<br>NI<br><br>DISTRICT<br>CodeWiz (Rank 1)<br>macoemacoe1 (Rank 2)<br>Nexalin (Rank 3)<br><br>REFERENDUMS<br>Const. Amendment Procedure: yes<br>Electoral Districts Implementation: yes",
+                        scope: "All",
+                        bookStatus: "Unsigned",
+                        justification: "Ballot was not signed"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    },
+                    {
+                        content: "DISTRICT<br>macoemacoe1 (Rank 1)<br>CodeWiz (Rank 2)<br>Nexalin (Rank 3)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    },
+                    {
+                        content: "DISTRICT<br>Nexalin (Rank 1)<br>macoemacoe1 (Rank 2)<br>CodeWiz (Rank 3)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    },
+                    {
+                        content: "DISTRICT<br>macoemacoe1 (Rank 1)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    },
+                    {
+                        content: "DISTRICT<br>macoemacoe1 (Rank 1)<br>CodeWiz (Rank 2)<br>Nexalin (Rank 3)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    },
+                    {
+                        content: "DISTRICT<br>macoemacoe1 (Rank 1)<br>CodeWiz (Rank 2)<br>Nexalin (Rank 3)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    },
+                    {
+                        content: "DISTRICT<br>macoemacoe1 (Rank 1)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    },
+                    {
+                        content: "DISTRICT<br>macoemacoe1 (Rank 1)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    },
+                    {
+                        content: "DISTRICT<br>macoemacoe1 (Rank 1)<br>Nexalin (Rank 2)<br>CodeWiz (Rank 3)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    },
+                    {
+                        content: "DISTRICT<br>macoemacoe1 (Rank 1)<br>Nexalin (Rank 2)<br>CodeWiz (Rank 3)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    }
+                ]
+            },
+            {
+                name: "Harlon Southeast",
+                id: "hsli",
+                noWinner: false,
+                irvRounds: [
+                    {
+                        round: 3,
+                        results: [
+                            { name: "karevilen", party: "Harlon Progress Party", votes: 2 },
+                            { name: "skepia", party: "Rights to All Booze", votes: 5 }
+                        ]
+                    },
+                    {
+                        round: 2,
+                        results: [
+                            { name: "karevilen", party: "Harlon Progress Party", votes: 2 },
+                            { name: "DC165", party: "New Initiative", votes: 1 },
+                            { name: "skepia", party: "Rights to All Booze", votes: 4 }
+                        ]
+                    },
+                    {
+                        round: 1,
+                        results: [
+                            { name: "karevilen", party: "Harlon Progress Party", votes: 2 },
+                            { name: "DC165", party: "New Initiative", votes: 1 },
+                            { name: "skepia", party: "Rights to All Booze", votes: 4 },
+                            { name: "Nexalin", party: "Independent", votes: 0 }
+                        ]
+                    }
+                ],
+                atLargeVotes: { "Rights to All Booze": 5, "Harlon Progress Party": 2, "New Initiative": 1 },
+                referendumVotes: [{ title: "Constitutional Amendment Procedure Referendum", yes: 7, no: 1 }, { title: "Electoral Districts Implementation Referendum", yes: 6, no: 2 }],
+                spoiltBallots: [
+                    {
+                        content: "Empty book",
+                        scope: "All",
+                        bookStatus: "Signed",
+                        justification: "Nothing was voted"
+                    },
+                    {
+                        content: "AT-LARGE<br>BAR<br><br>DISTRICT<br>skepia (Rank 1)<br><br>REFERENDUMS<br>Const. Amendment Procedure: yes<br>Electoral Districts Implementation: yes",
+                        scope: "All",
+                        bookStatus: "Unsigned",
+                        justification: "Ballot was not signed"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    }
+                ]
+            },
+            {
+                name: "Outer Isles",
+                id: "oi",
+                noWinner: false,
+                irvRounds: [
+                    {
+                        round: 2,
+                        results: [
+                            { name: "Westray", party: "Harlon Progress Party", votes: 5 },
+                            { name: "Kr4ka", party: "Rights to All Booze", votes: 1 }
+                        ]
+                    },
+                    {
+                        round: 1,
+                        results: [
+                            { name: "Westray", party: "Harlon Progress Party", votes: 5 },
+                            { name: "Kr4ka", party: "Rights to All Booze", votes: 1 },
+                            { name: "Nexalin", party: "Independent", votes: 0 }
+                        ]
+                    }
+                ],
+                atLargeVotes: { "Rights to All Booze": 4, "Harlon Progress Party": 4, "New Initiative": 0 },
+                referendumVotes: [{ title: "Constitutional Amendment Procedure Referendum", yes: 7, no: 1 }, { title: "Electoral Districts Implementation Referendum", yes: 6, no: 2 }],
+                spoiltBallots: [
+                    {
+                        content: "DISTRICT<br>Westray (Rank 1)<br>Kr4ka (Rank 2)<br>Nexalin (Rank 3)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    },
+                    {
+                        content: "AT-LARGE<br>BAR<br><br>Const. Amendment Procedure: yes<br>Electoral Districts Implementation: yes",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not eligible to vote"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    }
+                ]
+            },
+            {
+                name: "Scyllia - Harlon North",
+                id: "shn",
+                noWinner: false,
+                irvRounds: [
+                    {
+                        round: 3,
+                        results: [
+                            { name: "Pro_Of_Survival", party: "Harlon Progress Party", votes: 4 },
+                            { name: "Janukiii_", party: "New Initiative", votes: 6 }
+                        ]
+                    },
+                    {
+                        round: 2,
+                        results: [
+                            { name: "Pro_Of_Survival", party: "Harlon Progress Party", votes: 3 },
+                            { name: "Janukiii_", party: "New Initiative", votes: 6 },
+                            { name: "Kr4ka", party: "Rights to All Booze", votes: 2 }
+                        ]
+                    },
+                    {
+                        round: 1,
+                        results: [
+                            { name: "Pro_Of_Survival", party: "Harlon Progress Party", votes: 2 },
+                            { name: "Janukiii_", party: "New Initiative", votes: 6 },
+                            { name: "Kr4ka", party: "Rights to All Booze", votes: 2 },
+                            { name: "Nexalin", party: "Independent", votes: 1 }
+                        ]
+                    }
+                ],
+                atLargeVotes: { "Rights to All Booze": 3, "Harlon Progress Party": 4, "New Initiative": 6 },
+                referendumVotes: [{ title: "Constitutional Amendment Procedure Referendum", yes: 11, no: 0 }, { title: "Electoral Districts Implementation Referendum", yes: 8, no: 3 }],
+                spoiltBallots: [
+                    {
+                        content: "Referendums not filled out",
+                        scope: "Referendums",
+                        bookStatus: "Signed",
+                        justification: "Referendum votes not counted"
+                    },
+                    {
+                        content: "Referendums not filled out",
+                        scope: "Referendums",
+                        bookStatus: "Signed",
+                        justification: "Referendum votes not counted"
+                    },
+                    {
+                        content: "Oak Sign",
+                        scope: "All",
+                        bookStatus: "Unsigned",
+                        justification: "It's an oak sign"
+                    },
+                    {
+                        content: "DISTRICT<br>Janukiii_ (Rank 1)<br>Kr4ka (Rank 2)<br>Nexalin (Rank 3)<br>Pro_Of_Survival (Rank 4)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    },
+                    {
+                        content: "DISTRICT<br>Pro_Of_Survival (Rank 1)<br>Nexalin (Rank 2)<br>Janukiii_ (Rank 3)<br>Kr4ka (Rank 4)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    }
+                ]
+            },
+            {
+                name: "Sealand",
+                id: "s",
+                noWinner: false,
+                irvRounds: [
+                    {
+                        round: 1,
+                        results: [
+                            { name: "NicheGuy", party: "Harlon Progress Party", votes: 5 },
+                            { name: "AstroCraft1", party: "New Initiative", votes: 4 }
+                        ]
+                    }
+                ],
+                atLargeVotes: { "Rights to All Booze": 3, "Harlon Progress Party": 3, "New Initiative": 4 },
+                referendumVotes: [{ title: "Constitutional Amendment Procedure Referendum", yes: 9, no: 1 }, { title: "Electoral Districts Implementation Referendum", yes: 8, no: 2 }],
+                spoiltBallots: [
+                    {
+                        content: "AT-LARGE<br>BAR<br><br>DISTRICT<br>NicheGuy (Rank 1)<br>AstroCraft1 (Rank 2)<br><br>REFERENDUMS<br>Const. Amendment Procedure: no<br>Electoral Districts Implementation: no",
+                        scope: "All",
+                        bookStatus: "Unsigned",
+                        justification: "Ballot was not signed"
+                    },
+                    {
+                        content: "AT-LARGE<br>HPP<br><br>DISTRICT<br>NicheGuy (Rank 1)<br>AstroCraft1 (Rank 2)<br><br>REFERENDUMS<br>Const. Amendment Procedure: no<br>Electoral Districts Implementation: yes",
+                        scope: "All",
+                        bookStatus: "Unsigned",
+                        justification: "Ballot was not signed"
+                    },
+                    {
+                        content: "DISTRICT<br>AstroCraft1 (Rank 1)<br>NicheGuy (Rank 2)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    }
+                ]
+            },
+            {
+                name: "Westlyn",
+                id: "w",
+                noWinner: false,
+                irvRounds: [
+                    {
+                        round: 5,
+                        results: [
+                            { name: "Liam_Chan", party: "New Initiative", votes: 3 },
+                            { name: "veryreal_alex", party: "Rights to All Booze", votes: 2 }
+                        ]
+                    },
+                    {
+                        round: 4,
+                        results: [
+                            { name: "BobbyHubbeltins", party: "Aurora Party", votes: 0 },
+                            { name: "Liam_Chan", party: "New Initiative", votes: 3 },
+                            { name: "veryreal_alex", party: "Rights to All Booze", votes: 2 }
+                        ]
+                    },
+                    {
+                        round: 3,
+                        results: [
+                            { name: "Liam_Chan", party: "New Initiative", votes: 2 },
+                            { name: "Nexalin", party: "Independent", votes: 3 }
+                        ]
+                    },
+                    {
+                        round: 2,
+                        results: [
+                            { name: "Liam_Chan", party: "New Initiative", votes: 2 },
+                            { name: "veryreal_alex", party: "Rights to All Booze", votes: 1 },
+                            { name: "Nexalin", party: "Independent", votes: 2 }
+                        ]
+                    },
+                    {
+                        round: 1,
+                        results: [
+                            { name: "BobbyHubbeltins", party: "Aurora Party", votes: 0 },
+                            { name: "Liam_Chan", party: "New Initiative", votes: 2 },
+                            { name: "veryreal_alex", party: "Rights to All Booze", votes: 1 },
+                            { name: "Nexalin", party: "Independent", votes: 2 }
+                        ]
+                    }
+                ],
+                atLargeVotes: { "Rights to All Booze": 6, "Harlon Progress Party": 1, "New Initiative": 3},
+                referendumVotes: [{ title: "Constitutional Amendment Procedure Referendum", yes: 9, no: 1 }, { title: "Electoral Districts Implementation Referendum", yes: 8, no: 2 }],
+                spoiltBallots: [
+                    {
+                        content: "AT-LARGE<br>HPP<br><br>DISTRICT<br>BobbyHubbeltins (Rank 1)<br><br>REFERENDUMS<br>Const. Amendment Procedure: yes<br>Electoral Districts Implementation: no",
+                        scope: "All",
+                        bookStatus: "Unsigned",
+                        justification: "Ballot was not signed"
+                    },
+                    {
+                        content: "DISTRICT<br>veryreal_alex (Rank 1)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Not on voter roll"
+                    },
+                    {
+                        content: "DISTRICT<br>macoemacoe1 (Rank 1)<br>CodeWiz (Rank 2)<br>Nexalin (Rank 3)",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "Ballot of wrong district / Is on voter roll of this district"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    },
+                    {
+                        content: "No district vote",
+                        scope: "District",
+                        bookStatus: "Signed",
+                        justification: "District vote not counted / Not on voter roll"
+                    }
+                ]
+            }
+        ];
+
+        const manualCandidates = [
+            { name: "CodeWiz", party: "AP", list: "Harlon Progress Party", districts: ["cc"], atLarge: true },
+            { name: "NicheGuy", party: "HPP", list: "Harlon Progress Party", districts: ["s"], atLarge: true },
+            { name: "karevilen", party: "HPP", list: "Harlon Progress Party", districts: ["hsli"], atLarge: true },
+            { name: "BobbyHubbeltins", party: "AP", list: "Harlon Progress Party", districts: ["w"], atLarge: true },
+            { name: "Pro_Of_Survival", party: "HPP", list: "Harlon Progress Party", districts: ["shn"], atLarge: true },
+            { name: "Bp_39", party: "HPP", list: "Harlon Progress Party", atLarge: true },
+            { name: "MrSamster2000", party: "HPP", list: "Harlon Progress Party", atLarge: true },
+            { name: "PiOs67", party: "HPP", list: "Harlon Progress Party", atLarge: true },
+            { name: "MapleSyrup52", party: "HPP", list: "Harlon Progress Party", atLarge: true },
+            { name: "Westray", party: "HPP", list: "Harlon Progress Party", districts: ["oi"], atLarge: true },
+            { name: "yoshipie_", party: "HPP", list: "Harlon Progress Party", atLarge: true },
+
+            { name: "Janukiii_", party: "", list: "New Initiative", districts: ["shn"], atLarge: true },
+            { name: "Liam_Chan", party: "", list: "New Initiative", districts: ["w"], atLarge: true },
+            { name: "Chocolate_Rep", party: "", list: "New Initiative", atLarge: true },
+            { name: "DC165", party: "", list: "New Initiative", districts: ["hsli"], atLarge: true },
+            { name: "AstroCraft1", party: "", list: "New Initiative", districts: ["s"], atLarge: true },
+
+            { name: "Kr4ka", party: "", list: "Rights to All Booze", districts: ["shn", "oi"], atLarge: true },
+            { name: "veryreal_alex", party: "", list: "Rights to All Booze", districts: ["w"], atLarge: true },
+            { name: "doomcat327", party: "", list: "Rights to All Booze", atLarge: true },
+            { name: "macoemacoe1", party: "", list: "Rights to All Booze", districts: ["cc"], atLarge: true },
+            { name: "skepia", party: "", list: "Rights to All Booze", districts: ["hsli"], atLarge: true },
+            { name: "Its_novanut", party: "", list: "Rights to All Booze", atLarge: true },
+            { name: "Minezelum", party: "", list: "Rights to All Booze", atLarge: true },
+            { name: "WL607", party: "", list: "Rights to All Booze", atLarge: true },
+            { name: "ItsArnabCake", party: "", list: "Rights to All Booze", atLarge: true },
+            { name: "Anakinsteeve", party: "", list: "Rights to All Booze", atLarge: true },
+            { name: "_rovs_", party: "", list: "Rights to All Booze", atLarge: true },
+
+            { name: "Nexalin", party: "", list: "Independent", districts: ["cc", "hsli", "w", "shn", "oi"], atLarge: false }
+        ];
+
+        let currentRoundIdx = 0;
+        let candidateMode = 'all';
+
+        function getCol(p) { return partyColors[p] || partyColors["Default"]; }
+
+        function view(id) {
+            document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById('view-' + id).classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
+
+            // Add this line:
+            if (id === 'audit') renderAudit();
+
+            if (id === 'candidates') renderCandidates();
+            if (id === 'overview') renderOverview();
+            if (id === 'districts') { currentRoundIdx = 0; renderDistrictDetail(); }
+            if (id === 'atlarge') renderAtLarge();
+            if (id === 'referendums') renderReferendums();
+            window.scrollTo(0, 0);
+        }
+
+
+
+        function setCandidateMode(mode) {
+            candidateMode = mode;
+
+            document.querySelectorAll('[id^="cand-"]').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('cand-' + mode).classList.add('active');
+
+            const sel = document.getElementById('candidateDistrictSelect');
+
+            if (mode === 'district') {
+                sel.classList.remove('hidden');
+
+                if (!sel.innerHTML) {
+                    sel.innerHTML = districts.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+                }
+            } else {
+                sel.classList.add('hidden');
+            }
+
+            renderCandidates();
+        }
+
+        function renderCandidates() {
+            let list = [...manualCandidates];
+
+            if (candidateMode === 'district') {
+                const sel = document.getElementById('candidateDistrictSelect').value;
+
+                list = list.filter(c =>
+                    c.districts && c.districts.includes(sel)
+                );
+            }
+
+            if (candidateMode === 'atlarge') {
+                list = list.filter(c => c.atLarge);
+            }
+
+            // 🧠 Group by list (party block)
+            const grouped = {};
+
+            list.forEach(c => {
+                if (!grouped[c.list]) grouped[c.list] = [];
+                grouped[c.list].push(c);
+            });
+
+            document.getElementById('candidate-container').innerHTML =
+                Object.entries(grouped).map(([listName, candidates]) => `
+            <div class="card p-6">
+                <h3 class="text-xl font-black mb-4">${listName}</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    ${candidates.map((c, i) => `
+                        <div class="flex justify-between items-center bg-slate-50 border rounded px-3 py-2">
+                            <div class="flex gap-3 items-center">
+                                <span class="text-xs text-slate-400 font-black">${(c.list != 'Independent' && candidateMode != 'district') ? (i + 1) : ''}</span>
+                                <span class="font-bold">${c.name}</span>
+                            </div>
+                            <span class="text-xs uppercase font-bold text-slate-500">
+                                ${c.party}
+                            </span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+
+            const sel = document.getElementById('candidateDistrictSelect');
+
+            if (sel && !sel.innerHTML) {
+                sel.innerHTML = districts.map(d =>
+                    `<option value="${d.id}">${d.name}</option>`
+                ).join('');
+            }
+        }
+
+        document.getElementById('candidateDistrictSelect')
+            .addEventListener('change', renderCandidates);
+
+        function renderOverview() {
+            document.getElementById('overview-districts').innerHTML = districts.map(d => {
+                const rounds = d.irvRounds || [];
+
+                // If there are no rounds, show "Results Pending"
+                if (rounds.length === 0) {
+                    return `<div class="card p-4 border-l-4 border-slate-300">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">${d.name}</p>
+                        <p class="font-black text-slate-400 italic">Results Pending</p>
+                    </div>`;
+                }
+
+                // No representative elected
+                if (d.noWinner) {
+                    return `<div class="card p-4 border-l-4 border-slate-300">
+                                <p class="text-[9px] font-black text-slate-400 uppercase">${d.name}</p>
+                                <p class="font-black text-slate-500 italic">No Representative Elected</p>
+                            </div>`;
+                }
+
+                // FIND THE HIGHEST ROUND NUMBER
+                // This scans all rounds and picks the one where "round" is the largest number
+                const latestRound = rounds.reduce((prev, current) => (prev.round > current.round) ? prev : current);
+
+                // Find the winner of that specific round
+                const win = [...latestRound.results].sort((a, b) => b.votes - a.votes)[0];
+
+                return `
+            <div class="card p-4 border-l-4" style="border-color: ${getCol(win.party)}">
+                <p class="text-[9px] font-black text-slate-400 uppercase">${d.name}</p>
+                <p class="font-black text-slate-800 truncate">${win.name}</p>
+                <div class="flex justify-between items-center mt-1">
+                    <span class="text-[10px] font-bold uppercase" style="color: ${getCol(win.party)}">${win.party}</span>
+                </div>
+            </div>`;
+            }).join('');
+
+            // Renders the At-Large list (this remains the same as your manual list)
+            document.getElementById('overview-atlarge').innerHTML = manualAtLargeWinners.map(w => `
+        <div class="card p-4 border-l-4" style="border-color: ${getCol(w.party)}">
+            <p class="text-[9px] font-black text-slate-400 uppercase">National representative</p>
+            <p class="font-black text-slate-800 truncate">${w.name}</p>
+            <p class="text-[10px] font-bold uppercase" style="color: ${getCol(w.party)}">${w.party}</p>
+        </div>`).join('');
+        }
+
+        function setRound(idx) { currentRoundIdx = idx; renderDistrictDetail(); }
+
+        function renderDistrictDetail() {
+            const sel = document.getElementById('districtSelect');
+            if (!sel.innerHTML) sel.innerHTML = districts.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+            const d = districts.find(dist => dist.id === sel.value);
+
+            const roundSel = document.getElementById('round-selector');
+            const rounds = d.irvRounds || [];
+
+            if (rounds.length === 0) {
+                roundSel.innerHTML = '<span class="text-[10px] font-bold text-slate-400 uppercase">Waiting for Data...</span>';
+                document.getElementById('district-detail').innerHTML = `<div class="col-span-full py-12 text-center card bg-slate-50 border-dashed border-2"><p class="text-slate-400 font-bold uppercase tracking-widest">No votes reported for this district yet.</p></div>`;
+                document.getElementById('district-atlarge-breakdown').innerHTML = '<p class="text-sm text-slate-400 italic">No national data.</p>';
+                document.getElementById('district-ref-breakdown').innerHTML = '<p class="text-sm text-slate-400 italic">No referendum data.</p>';
+                return;
+            }
+
+            if (rounds.length > 1) {
+                roundSel.innerHTML = rounds.map((r, i) => `<button onclick="setRound(${i})" class="round-tab ${currentRoundIdx === i ? 'active' : ''}">Round ${r.round}</button>`).join('');
+            } else { roundSel.innerHTML = ''; }
+
+            const currentRound = rounds[currentRoundIdx] || rounds[0];
+            const sorted = [...currentRound.results].sort((a, b) => b.votes - a.votes);
+
+            let statusBanner = '';
+
+            if (d.noWinner) {
+                statusBanner = `
+                    <div class="col-span-full mb-4">
+                        <div class="card p-4 border-l-4 border-yellow-500 bg-yellow-50">
+                            <p class="text-xs font-black uppercase text-yellow-700">
+                                No Representative Elected
+                            </p>
+                            <p class="text-sm text-yellow-800 mt-1">
+                                This district completed voting, but no candidate is eligible to represent it in the House of Assembly.
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('district-detail').innerHTML = statusBanner + sorted.map((c, i) => `
+                    <div class="card p-6" style="${i === 0 ? `border: 2px solid ${getCol(c.party)}` : ''}">
+                        <div class="flex justify-between mb-2"><span class="text-[10px] font-bold uppercase" style="color: ${getCol(c.party)}">${c.party}</span>${i === 0 ? '<span class="badge-win">Leading</span>' : ''}</div>
+                        <h4 class="text-xl font-black text-slate-800">${c.name}</h4>
+                        <div class="text-4xl font-mono font-black mt-2" style="color: ${getCol(c.party)}">${c.votes.toLocaleString()}</div>
+                    </div>`).join('');
+
+            const alTotal = Object.values(d.atLargeVotes || {}).reduce((a, b) => a + b, 0);
+            if (alTotal > 0) {
+                document.getElementById('district-atlarge-breakdown').innerHTML = Object.entries(d.atLargeVotes).sort((a, b) => b[1] - a[1]).map(([p, v]) => {
+                    const perc = (v / alTotal * 100).toFixed(1);
+                    return `<div><div class="flex justify-between text-[10px] font-black mb-1 uppercase"><span>${p}</span><span>${v} (${perc}%)</span></div>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="h-full" style="width: ${perc}%; background-color: ${getCol(p)}"></div></div></div>`;
+                }).join('');
+            }
+
+            if (d.referendumVotes && d.referendumVotes.length > 0) {
+                document.getElementById('district-ref-breakdown').innerHTML = d.referendumVotes.map((rv, index) => {
+                    const total = rv.yes + rv.no;
+                    const yesP = total > 0 ? (rv.yes / total * 100).toFixed(1) : 0;
+                    const mainRef = referendums[index] || { threshold: 0.5 };
+                    const isPass = total > 0 && (rv.yes / total) >= mainRef.threshold;
+                    return `<div class="card p-4"><div class="flex justify-between items-start mb-2"><div><span class="text-xs font-black text-slate-800 uppercase block">${rv.title}</span><span class="text-[9px] font-bold text-slate-400">GOAL: ${(mainRef.threshold * 100).toFixed(1)}%</span></div>
+                                <span class="text-[10px] font-bold ${isPass ? 'text-green-600' : 'text-red-600'} uppercase">${yesP}% — ${total > 0 ? (isPass ? 'Passing' : 'Failing') : 'No Data'}</span></div>
+                                <div class="w-full h-4 bg-slate-100 rounded overflow-hidden flex shadow-inner border border-slate-200"><div class="bg-green-500 h-full transition-all" style="width: ${yesP}%;font-size:7pt;color:white"><center>${rv.yes}</center></div><div class="bg-red-500 h-full transition-all" style="width: ${100 - yesP}%;font-size:7pt;color:white"><center>${rv.no}</center></div></div></div>`;
+                }).join('');
+            }
+        }
+
+        function renderAtLarge() {
+            const total = Object.values(manualAtLargeVotes).reduce((a, b) => a + b, 0);
+            document.getElementById('atlarge-stats').innerHTML = Object.entries(manualAtLargeVotes).sort((a, b) => b[1] - a[1]).map(([party, votes]) => {
+                const perc = (votes / total * 100).toFixed(1);
+                return `<div class="mb-4"><div class="flex justify-between text-[10px] font-black mb-1"><span>${party}</span><span>${votes} (${perc}%)</span></div>
+                        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="h-full" style="width: ${perc}%; background-color: ${getCol(party)}"></div></div></div>`;
+            }).join('');
+            document.getElementById('atlarge-winners').innerHTML = manualAtLargeWinners.map(w => `<div class="card p-5 border-l-8" style="border-color: ${getCol(w.party)}"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">National representative</p><h4 class="text-xl font-black text-slate-800">${w.name}</h4><p class="text-xs font-bold uppercase" style="color: ${getCol(w.party)}">${w.party}</p></div>`).join('');
+        }
+
+        function renderReferendums() {
+            document.getElementById('referendum-container').innerHTML = referendums.map(r => {
+                const total = r.yes + r.no;
+                const yesP = (r.yes / total * 100).toFixed(1);
+                const isPass = (r.yes / total) >= r.threshold;
+                return `<div class="card p-8 ${isPass ? 'ref-pass' : 'ref-fail'}"><div class="flex flex-col md:flex-row justify-between items-start gap-4 mb-6"><div class="max-w-2xl"><div class="flex items-center gap-3 mb-2"><span class="${isPass ? 'status-pill-pass' : 'status-pill-fail'}">${isPass ? '✓ Passing' : '✕ Failing'}</span><span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Goal: ${(r.threshold * 100).toFixed(1)}% Required</span></div><h3 class="text-2xl font-black text-slate-800">${r.title}</h3><p class="text-slate-500 mt-2 text-sm italic">${r.question}</p></div><div class="text-right font-mono"><p class="text-[10px] font-black text-slate-400 uppercase">Total Votes</p><p class="text-2xl font-black">${total.toLocaleString()}</p></div></div><div class="relative pt-2"><div class="flex justify-between mb-2"><div class="text-left"><span class="block text-xs font-black text-slate-400 uppercase">Yes</span><span class="text-3xl font-black ${isPass ? 'text-green-600' : 'text-slate-400'}">${yesP}%</span></div><div class="text-right"><span class="block text-xs font-black text-slate-400 uppercase">No</span><span class="text-3xl font-black ${!isPass ? 'text-red-600' : 'text-slate-400'}">${(100 - yesP).toFixed(1)}%</span></div></div><div class="w-full h-8 bg-slate-100 rounded-full overflow-hidden flex border border-slate-200"><div class="h-full ${isPass ? 'bg-green-500' : 'bg-slate-400'}" style="width: ${yesP}%"></div><div class="h-full ${!isPass ? 'bg-red-500' : 'bg-slate-300'}" style="width: ${100 - yesP}%"></div></div></div></div>`;
+            }).join('');
+        }
+
+        function renderAudit() {
+            document.getElementById('audit-container').innerHTML = districts.map(d => {
+                const ballots = d.spoiltBallots || [];
+                const signedCount = ballots.filter(b => b.bookStatus === "Signed").length;
+                const unsignedCount = ballots.filter(b => b.bookStatus === "Unsigned").length;
+
+                return `
+            <div class="card p-6 col-span-full border-t-4 border-slate-800 mb-8">
+                <div class="flex flex-col md:flex-row justify-between items-start mb-6 gap-4">
+                    <div>
+                        <h3 class="text-2xl font-black text-slate-800 uppercase">${d.name}</h3>
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-widest">Official Senate Record of Spoiled Votes</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="text-center px-4 py-2 bg-slate-100 rounded-lg">
+                            <p class="text-[10px] font-black text-slate-500 uppercase">Signed Books</p>
+                            <p class="text-xl font-black text-slate-800">${signedCount}</p>
+                        </div>
+                        <div class="text-center px-4 py-2 bg-slate-100 rounded-lg">
+                            <p class="text-[10px] font-black text-slate-500 uppercase">Other items</p>
+                            <p class="text-xl font-black text-slate-800">${unsignedCount}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b-2 border-slate-200 bg-slate-50">
+                                <th class="py-3 text-[10px] font-black uppercase text-slate-500 px-4">Spoilt Scope</th>
+                                <th class="py-3 text-[10px] font-black uppercase text-slate-500 px-4">Ballot Content</th>
+                                <th class="py-3 text-[10px] font-black uppercase text-slate-500 px-4">Status</th>
+                                <th class="py-3 text-[10px] font-black uppercase text-slate-500 px-4">Justification</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            ${ballots.map(b => {
+                    // Split scope by comma and create small badges
+                    const scopeBadges = b.scope.split(',').map(s =>
+                        `<span class="inline-block bg-slate-800 text-white text-[9px] font-black px-1.5 py-0.5 rounded mr-1 mb-1 uppercase">${s.trim()}</span>`
+                    ).join('');
+
+                    return `
+                                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                                    <td class="py-4 px-4 whitespace-nowrap">${scopeBadges}</td>
+                                    <td class="py-4 px-4 font-medium text-slate-700">${b.content}</td>
+                                    <td class="py-4 px-4">
+                                        <span class="px-2 py-1 rounded text-[10px] font-black uppercase ${b.bookStatus === 'Signed' ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-slate-600'}">
+                                            ${b.bookStatus}
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-slate-500 italic">${b.justification}</td>
+                                </tr>
+                            `}).join('')}
+                        </tbody>
+                    </table>
+                    ${ballots.length === 0 ? '<p class="py-8 text-center text-slate-400 italic">No spoiled votes recorded for this district.</p>' : ''}
+                </div>
+            </div>`;
+            }).join('');
+        }
+
+        view('overview');
+    </script>
+</body>
+</html>
