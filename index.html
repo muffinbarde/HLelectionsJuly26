@@ -315,48 +315,15 @@
             "Independent": "#64748b", "Default": "#94a3b8"
         };
         const manualAtLargeWinners = [
-            { name: "Kr4ka", party: "Rights to All Booze"},
-            { name: "veryreal_alex", party: "Rights to All Booze"},
-            { name: "doomcat327", party: "Rights to All Booze" },
-            { name: "macoemacoe1", party: "Rights to All Booze" }];
-        const manualAtLargeVotes = { "Harlon Progress Party": 21, "New Initiative": 15, "Rights to All Booze": 35};
+            { name: "Results Pending", party: ""},
+            { name: "Results Pending", party: ""},
+            { name: "Results Pending", party: "" },
+            { name: "Results Pending", party: "" }];
+        const manualAtLargeVotes = { };
 
         const presidentialElection = {
 
             rounds:[
-                {
-                    round:1,
-
-                    results:[
-                        {
-                            name:"Candidate A",
-                            votes:50
-                        },
-                        {
-                            name:"Candidate B",
-                            votes:40
-                        },
-                        {
-                            name:"Candidate C",
-                            votes:15
-                        }
-                    ]
-                },
-
-                {
-                    round:2,
-
-                    results:[
-                        {
-                            name:"Candidate A",
-                            votes:65
-                        },
-                        {
-                            name:"Candidate B",
-                            votes:40
-                        }
-                    ]
-                }
             ]
 
         };
@@ -366,41 +333,6 @@
             seats:5,
 
             counts:[
-                {
-                    count:1,
-                    quota:20,
-
-                    results:[
-                        {
-                            name:"Candidate A",
-                            votes:55,
-                            status:"elected"
-                        },
-                        {
-                            name:"Candidate B",
-                            votes:43,
-                            status:"continuing"
-                        }
-                    ]
-                },
-                
-                {
-                    count:2,
-                    quota:20,
-
-                    results:[
-                        {
-                            name:"Candidate A",
-                            votes:55,
-                            status:"elected"
-                        },
-                        {
-                            name:"Candidate B",
-                            votes:43,
-                            status:"eliminated"
-                        }
-                    ]
-                }
             ]
 
         };
@@ -419,18 +351,12 @@
                 },
 
                 councilVotes: {
-                    "muffinbarde": 0,
+                    "Candidate One": 0,
                     "Candidate Two": 0,
                     "Candidate Three": 0
                 },
 
                 spoiltBallots: [
-                    {
-                        content: "Referendums not filled out",
-                        scope: "Referendums",
-                        bookStatus: "Signed",
-                        justification: "Referendum votes not counted"
-                    }
                 ]
             },
             {
@@ -438,52 +364,20 @@
                 id: "n",
                 noWinner: false,
                 irvRounds: [
-                    {
-                        round: 3,
-                        results: [
-                            { name: "karevilen", party: "Harlon Progress Party", votes: 2 },
-                            { name: "skepia", party: "Rights to All Booze", votes: 5 }
-                        ]
-                    },
-                    {
-                        round: 2,
-                        results: [
-                            { name: "karevilen", party: "Harlon Progress Party", votes: 2 },
-                            { name: "DC165", party: "New Initiative", votes: 1 },
-                            { name: "skepia", party: "Rights to All Booze", votes: 4 }
-                        ]
-                    },
-                    {
-                        round: 1,
-                        results: [
-                            { name: "karevilen", party: "Harlon Progress Party", votes: 2 },
-                            { name: "DC165", party: "New Initiative", votes: 1 },
-                            { name: "skepia", party: "Rights to All Booze", votes: 4 },
-                            { name: "Nexalin", party: "Independent", votes: 0 }
-                        ]
-                    }
                 ],
-                atLargeVotes: { "Rights to All Booze": 5, "Harlon Progress Party": 2, "New Initiative": 1 },
-                referendumVotes: [{ title: "Constitutional Amendment Procedure Referendum", yes: 7, no: 1 }, { title: "Electoral Districts Implementation Referendum", yes: 6, no: 2 }],
+                atLargeVotes: { "Rights to All Booze": 0, "Harlon Progress Party": 0, "New Initiative": 0 },
+                presidentialVotes: {
+                    "Candidate One": 0,
+                    "Candidate Two": 0
+                },
+
+                councilVotes: {
+                    "Candidate One": 0,
+                    "Candidate Two": 0,
+                    "Candidate Three": 0
+                },
+
                 spoiltBallots: [
-                    {
-                        content: "Empty book",
-                        scope: "All",
-                        bookStatus: "Signed",
-                        justification: "Nothing was voted"
-                    },
-                    {
-                        content: "AT-LARGE<br>BAR<br><br>DISTRICT<br>skepia (Rank 1)<br><br>REFERENDUMS<br>Const. Amendment Procedure: yes<br>Electoral Districts Implementation: yes",
-                        scope: "All",
-                        bookStatus: "Unsigned",
-                        justification: "Ballot was not signed"
-                    },
-                    {
-                        content: "No district vote",
-                        scope: "District",
-                        bookStatus: "Signed",
-                        justification: "District vote not counted / Not on voter roll"
-                    }
                 ]
             },
             {
@@ -491,43 +385,20 @@
                 id: "oc",
                 noWinner: false,
                 irvRounds: [
-                    {
-                        round: 2,
-                        results: [
-                            { name: "Westray", party: "Harlon Progress Party", votes: 5 },
-                            { name: "Kr4ka", party: "Rights to All Booze", votes: 1 }
-                        ]
-                    },
-                    {
-                        round: 1,
-                        results: [
-                            { name: "Westray", party: "Harlon Progress Party", votes: 5 },
-                            { name: "Kr4ka", party: "Rights to All Booze", votes: 1 },
-                            { name: "Nexalin", party: "Independent", votes: 0 }
-                        ]
-                    }
                 ],
-                atLargeVotes: { "Rights to All Booze": 4, "Harlon Progress Party": 4, "New Initiative": 0 },
-                referendumVotes: [{ title: "Constitutional Amendment Procedure Referendum", yes: 7, no: 1 }, { title: "Electoral Districts Implementation Referendum", yes: 6, no: 2 }],
+                atLargeVotes: { "Rights to All Booze": 0, "Harlon Progress Party": 0, "New Initiative": 0 },
+                presidentialVotes: {
+                    "Candidate One": 0,
+                    "Candidate Two": 0
+                },
+
+                councilVotes: {
+                    "Candidate One": 0,
+                    "Candidate Two": 0,
+                    "Candidate Three": 0
+                },
+
                 spoiltBallots: [
-                    {
-                        content: "DISTRICT<br>Westray (Rank 1)<br>Kr4ka (Rank 2)<br>Nexalin (Rank 3)",
-                        scope: "District",
-                        bookStatus: "Signed",
-                        justification: "Not on voter roll"
-                    },
-                    {
-                        content: "AT-LARGE<br>BAR<br><br>Const. Amendment Procedure: yes<br>Electoral Districts Implementation: yes",
-                        scope: "District",
-                        bookStatus: "Signed",
-                        justification: "Not eligible to vote"
-                    },
-                    {
-                        content: "No district vote",
-                        scope: "District",
-                        bookStatus: "Signed",
-                        justification: "District vote not counted / Not on voter roll"
-                    }
                 ]
             },
             {
@@ -535,46 +406,20 @@
                 id: "s",
                 noWinner: false,
                 irvRounds: [
-                    {
-                        round: 3,
-                        results: [
-                            { name: "Pro_Of_Survival", party: "Harlon Progress Party", votes: 4 },
-                            { name: "Janukiii_", party: "New Initiative", votes: 6 }
-                        ]
-                    },
-                    {
-                        round: 2,
-                        results: [
-                            { name: "Pro_Of_Survival", party: "Harlon Progress Party", votes: 3 },
-                            { name: "Janukiii_", party: "New Initiative", votes: 6 },
-                            { name: "Kr4ka", party: "Rights to All Booze", votes: 2 }
-                        ]
-                    },
-                    {
-                        round: 1,
-                        results: [
-                            { name: "Pro_Of_Survival", party: "Harlon Progress Party", votes: 2 },
-                            { name: "Janukiii_", party: "New Initiative", votes: 6 },
-                            { name: "Kr4ka", party: "Rights to All Booze", votes: 2 },
-                            { name: "Nexalin", party: "Independent", votes: 1 }
-                        ]
-                    }
                 ],
-                atLargeVotes: { "Rights to All Booze": 3, "Harlon Progress Party": 4, "New Initiative": 6 },
-                referendumVotes: [{ title: "Constitutional Amendment Procedure Referendum", yes: 11, no: 0 }, { title: "Electoral Districts Implementation Referendum", yes: 8, no: 3 }],
+                atLargeVotes: { "Rights to All Booze": 0, "Harlon Progress Party": 0, "New Initiative": 0 },
+                presidentialVotes: {
+                    "Candidate One": 0,
+                    "Candidate Two": 0
+                },
+
+                councilVotes: {
+                    "Candidate One": 0,
+                    "Candidate Two": 0,
+                    "Candidate Three": 0
+                },
+
                 spoiltBallots: [
-                    {
-                        content: "Referendums not filled out",
-                        scope: "Referendums",
-                        bookStatus: "Signed",
-                        justification: "Referendum votes not counted"
-                    },
-                    {
-                        content: "Referendums not filled out",
-                        scope: "Referendums",
-                        bookStatus: "Signed",
-                        justification: "Referendum votes not counted"
-                    }
                 ]
             },
             {
@@ -582,108 +427,32 @@
                 id: "w",
                 noWinner: false,
                 irvRounds: [
-                    {
-                        round: 5,
-                        results: [
-                            { name: "Liam_Chan", party: "New Initiative", votes: 3 },
-                            { name: "veryreal_alex", party: "Rights to All Booze", votes: 2 }
-                        ]
-                    },
-                    {
-                        round: 4,
-                        results: [
-                            { name: "BobbyHubbeltins", party: "Aurora Party", votes: 0 },
-                            { name: "Liam_Chan", party: "New Initiative", votes: 3 },
-                            { name: "veryreal_alex", party: "Rights to All Booze", votes: 2 }
-                        ]
-                    },
-                    {
-                        round: 3,
-                        results: [
-                            { name: "Liam_Chan", party: "New Initiative", votes: 2 },
-                            { name: "Nexalin", party: "Independent", votes: 3 }
-                        ]
-                    },
-                    {
-                        round: 2,
-                        results: [
-                            { name: "Liam_Chan", party: "New Initiative", votes: 2 },
-                            { name: "veryreal_alex", party: "Rights to All Booze", votes: 1 },
-                            { name: "Nexalin", party: "Independent", votes: 2 }
-                        ]
-                    },
-                    {
-                        round: 1,
-                        results: [
-                            { name: "BobbyHubbeltins", party: "Aurora Party", votes: 0 },
-                            { name: "Liam_Chan", party: "New Initiative", votes: 2 },
-                            { name: "veryreal_alex", party: "Rights to All Booze", votes: 1 },
-                            { name: "Nexalin", party: "Independent", votes: 2 }
-                        ]
-                    }
                 ],
-                atLargeVotes: { "Rights to All Booze": 6, "Harlon Progress Party": 1, "New Initiative": 3},
-                referendumVotes: [{ title: "Constitutional Amendment Procedure Referendum", yes: 9, no: 1 }, { title: "Electoral Districts Implementation Referendum", yes: 8, no: 2 }],
+                atLargeVotes: { "Rights to All Booze": 0, "Harlon Progress Party": 0, "New Initiative": 0 },
+                presidentialVotes: {
+                    "Candidate One": 0,
+                    "Candidate Two": 0
+                },
+
+                councilVotes: {
+                    "Candidate One": 0,
+                    "Candidate Two": 0,
+                    "Candidate Three": 0
+                },
+
                 spoiltBallots: [
-                    {
-                        content: "AT-LARGE<br>HPP<br><br>DISTRICT<br>BobbyHubbeltins (Rank 1)<br><br>REFERENDUMS<br>Const. Amendment Procedure: yes<br>Electoral Districts Implementation: no",
-                        scope: "All",
-                        bookStatus: "Unsigned",
-                        justification: "Ballot was not signed"
-                    },
-                    {
-                        content: "DISTRICT<br>veryreal_alex (Rank 1)",
-                        scope: "District",
-                        bookStatus: "Signed",
-                        justification: "Not on voter roll"
-                    }
                 ]
             }
         ];
 
         const manualCandidates = [
-            { name: "CodeWiz", party: "AP", list: "Harlon Progress Party", districts: ["cc"], atLarge: true },
-            { name: "NicheGuy", party: "HPP", list: "Harlon Progress Party", districts: ["s"], atLarge: true },
-            { name: "karevilen", party: "HPP", list: "Harlon Progress Party", districts: ["hsli"], atLarge: true },
-            { name: "BobbyHubbeltins", party: "AP", list: "Harlon Progress Party", districts: ["w"], atLarge: true },
-            { name: "Pro_Of_Survival", party: "HPP", list: "Harlon Progress Party", districts: ["shn"], atLarge: true },
-            { name: "Bp_39", party: "HPP", list: "Harlon Progress Party", atLarge: true },
-            { name: "MrSamster2000", party: "HPP", list: "Harlon Progress Party", atLarge: true },
-            { name: "PiOs67", party: "HPP", list: "Harlon Progress Party", atLarge: true },
-            { name: "MapleSyrup52", party: "HPP", list: "Harlon Progress Party", atLarge: true },
-            { name: "Westray", party: "HPP", list: "Harlon Progress Party", districts: ["oi"], atLarge: true },
-            { name: "yoshipie_", party: "HPP", list: "Harlon Progress Party", atLarge: true },
-
-            { name: "Janukiii_", party: "", list: "New Initiative", districts: ["shn"], atLarge: true },
-            { name: "Liam_Chan", party: "", list: "New Initiative", districts: ["w"], atLarge: true },
-            { name: "Chocolate_Rep", party: "", list: "New Initiative", atLarge: true },
-            { name: "DC165", party: "", list: "New Initiative", districts: ["hsli"], atLarge: true },
-            { name: "AstroCraft1", party: "", list: "New Initiative", districts: ["s"], atLarge: true },
-
-            { name: "Kr4ka", party: "", list: "Rights to All Booze", districts: ["shn", "oi"], atLarge: true },
-            { name: "veryreal_alex", party: "", list: "Rights to All Booze", districts: ["w"], atLarge: true },
-            { name: "doomcat327", party: "", list: "Rights to All Booze", atLarge: true },
-            { name: "macoemacoe1", party: "", list: "Rights to All Booze", districts: ["cc"], atLarge: true },
-            { name: "skepia", party: "", list: "Rights to All Booze", districts: ["hsli"], atLarge: true },
-            { name: "Its_novanut", party: "", list: "Rights to All Booze", atLarge: true },
-            { name: "Minezelum", party: "", list: "Rights to All Booze", atLarge: true },
-            { name: "WL607", party: "", list: "Rights to All Booze", atLarge: true },
-            { name: "ItsArnabCake", party: "", list: "Rights to All Booze", atLarge: true },
-            { name: "Anakinsteeve", party: "", list: "Rights to All Booze", atLarge: true },
-            { name: "_rovs_", party: "", list: "Rights to All Booze", atLarge: true },
-
-            { name: "Nexalin", party: "", list: "Independent", districts: ["cc", "hsli", "w", "shn", "oi"], atLarge: false }
         ];
 
         const presidentialCandidates = [
-            { name: "Alice", party: "Harlon Progress Party" },
-            { name: "Bob", party: "Independent" }
         ];
 
 
         const councilCandidates = [
-            { name: "Charlie"},
-            { name: "Dave"}
         ];
 
         let currentRoundIdx = 0;
@@ -824,7 +593,7 @@
             <div class="card p-6 col-span-full">
 
                 <h3 class="text-xl font-black mb-4">
-                    STV Counts
+                    National Counts
                 </h3>
             `;
 
